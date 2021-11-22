@@ -31,7 +31,13 @@ fn thread_recieve(mut stream: TcpStream, shoud_exit: Arc<AtomicBool>) {
             },
         };
 
-        println!("{}", message.to_string());
+        let text = match message {
+            message::Message::UserText(v) => v,
+            message::Message::RegisterUsername(v) => v,
+            message::Message::ServerInfo(v) => v,
+        };
+
+        println!("{}", text);
     }
 }
 
@@ -114,6 +120,14 @@ fn main() {
                 stream = None;
                 thread_handle = None;
                 thread_killer = None;
+            }
+            Command::Help => {
+                println!("-------HELP: Available commands are-------");
+                println!("/help\t\t\tdisplays this help-message");
+                println!("/connect <ip>:<port>\tconnect to server with given adress");
+                println!("/disconnect\t\tdisconnect from server");
+                println!("/register <username>\tregister your username");
+                println!("/quit \t\t\texit the client");
             }
             Command::Quit => {
                 break;

@@ -5,6 +5,7 @@ pub enum Command {
     Text(String),
     RegisterUsername(String),
     Connect(String),
+    Help,
     Disconnect,
     Quit,
 }
@@ -15,6 +16,7 @@ impl Command {
         let quit_re = regex::Regex::new(r"^/quit$").unwrap();
         let connect_re = regex::Regex::new(r"^/connect (.*):(.*)$").unwrap();
         let disconnect_re = regex::Regex::new(r"^/disconnect$").unwrap();
+        let help_re = regex::Regex::new(r"^/help$").unwrap();
 
         if register_username_re.is_match(&cmd) {
             Command::RegisterUsername(String::from(&cmd[10..]))
@@ -24,6 +26,8 @@ impl Command {
             Command::Connect(String::from(&cmd[9..]))
         } else if disconnect_re.is_match(&cmd) {
             Command::Disconnect
+        } else if help_re.is_match(&cmd) {
+            Command::Help
         } else {
             Command::Text(cmd)
         }
